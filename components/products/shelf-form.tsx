@@ -43,7 +43,7 @@ export function ShelfForm({ shelf, onSuccess }: ShelfFormProps) {
       name: shelf?.name || "",
       material: shelf?.material || "",
       mountType: shelf?.mountType || "",
-      price: shelf?.price || 0,
+      price: shelf?.price?.min || 0,
       description: shelf?.description || "",
       length: shelf?.dimensions?.length || 0,
       width: shelf?.dimensions?.width || 0,
@@ -139,7 +139,7 @@ export function ShelfForm({ shelf, onSuccess }: ShelfFormProps) {
         name: data.name,
         material: "Дерево",
         mountType: "Настенная",
-        price: Number(data.price),
+        price: { min: Number(data.price) },
         description: data.description,
         dimensions: {
           length: 80,
@@ -195,13 +195,7 @@ export function ShelfForm({ shelf, onSuccess }: ShelfFormProps) {
           />
           {errors.name && <p className="text-sm text-red-500">{errors.name.message}</p>}
         </div>
-
-
-
-
       </div>
-
-
 
       {/* Цена */}
       <div className="space-y-2">

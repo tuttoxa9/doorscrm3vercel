@@ -43,7 +43,7 @@ export function TableForm({ table, onSuccess }: TableFormProps) {
       name: table?.name || "",
       material: table?.material || "",
       shape: table?.shape || "",
-      price: table?.price || 0,
+      price: table?.price?.min || 0,
       description: table?.description || "",
       length: table?.dimensions?.length || 0,
       width: table?.dimensions?.width || 0,
@@ -138,7 +138,7 @@ export function TableForm({ table, onSuccess }: TableFormProps) {
         name: data.name,
         material: "Дерево",
         shape: "Прямоугольный",
-        price: Number(data.price),
+        price: { min: Number(data.price) },
         description: data.description,
         dimensions: {
           length: 120,
@@ -193,13 +193,7 @@ export function TableForm({ table, onSuccess }: TableFormProps) {
           />
           {errors.name && <p className="text-sm text-red-500">{errors.name.message}</p>}
         </div>
-
-
-
-
       </div>
-
-
 
       {/* Цена */}
       <div className="space-y-2">

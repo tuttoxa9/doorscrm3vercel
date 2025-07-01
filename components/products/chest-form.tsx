@@ -43,7 +43,7 @@ export function ChestForm({ chest, onSuccess }: ChestFormProps) {
       name: chest?.name || "",
       material: chest?.material || "",
       handleType: chest?.handleType || "",
-      price: chest?.price || 0,
+      price: chest?.price?.min || 0,
       description: chest?.description || "",
       length: chest?.dimensions?.length || 0,
       width: chest?.dimensions?.width || 0,
@@ -139,7 +139,7 @@ export function ChestForm({ chest, onSuccess }: ChestFormProps) {
         name: data.name,
         material: "Дерево",
         handleType: "Круглые ручки",
-        price: Number(data.price),
+        price: { min: Number(data.price) },
         description: data.description,
         dimensions: {
           length: 80,

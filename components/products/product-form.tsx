@@ -39,7 +39,7 @@ export function ProductForm({ product, onSuccess }: ProductFormProps) {
     defaultValues: {
       name: product?.name || "",
       category: product?.category || "",
-      price: product?.price || 0,
+      price: product?.price?.min || 0,
       description: product?.description || "",
       inStock: product?.inStock ?? true,
       featured: product?.featured ?? false,
@@ -128,7 +128,7 @@ export function ProductForm({ product, onSuccess }: ProductFormProps) {
       const productData = {
         name: data.name,
         category: data.category,
-        price: Number(data.price),
+        price: { min: Number(data.price) },
         description: data.description,
         colors,
         images,

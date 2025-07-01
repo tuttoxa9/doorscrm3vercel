@@ -2,7 +2,7 @@ export interface Product {
   id: string
   name: string // Название товара
   category: string // Категория (вводится вручную)
-  price: number // Цена (BYN)
+  price: { min: number } // Цена (BYN)
   description: string // Описание
   colors: string[] // Доступные цвета
   images: string[] // Изображения (Firebase Storage)
@@ -16,7 +16,7 @@ export interface Product {
 export interface BaseItem {
   id: string
   name: string
-  price: number
+  price: { min: number }
   description: string
   colors: string[]
   images: string[]

@@ -149,8 +149,9 @@ export default function ProductsPage() {
     fetchAllData()
   }
 
-  const formatPrice = (price: number) => {
-    return `${price.toLocaleString()} BYN`
+  const formatPrice = (price: { min: number } | number) => {
+    const priceValue = typeof price === 'object' ? price.min : price;
+    return `${priceValue.toLocaleString()} BYN`
   }
 
   const ItemCard = ({ item, type, onEdit, onDelete }: {
