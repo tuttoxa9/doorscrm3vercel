@@ -11,37 +11,20 @@ import { useToast } from "@/components/ui/use-toast"
 import { Loader2 } from "lucide-react"
 import { format } from "date-fns"
 import { ru } from "date-fns/locale"
-
-interface OrderItem {
-  id: string
-  name: string
-  price: number
-  quantity: number
-}
-
-interface Order {
-  id: string
-  name: string
-  phone: string
-  email?: string
-  address?: string
-  status: string
-  createdAt: any
-  items: OrderItem[]
-  total: number
-  notes?: string
-}
+import { Order, ORDER_STATUSES } from "@/lib/types/requests"
 
 interface OrderDetailsProps {
   order: Order
   onSuccess: () => void
 }
 
-const ORDER_STATUSES = [
+const ORDER_STATUS_OPTIONS = [
   { value: "new", label: "Новый" },
-  { value: "processing", label: "В обработке" },
-  { value: "completed", label: "Выполнен" },
-  { value: "cancelled", label: "Отменен" },
+  { value: "processed", label: "Обработан" },
+  { value: "in_production", label: "В производстве" },
+  { value: "shipping", label: "На доставке" },
+  { value: "completed", label: "Завершён" },
+  { value: "cancelled", label: "Отменён" },
 ]
 
 export function OrderDetails({ order, onSuccess }: OrderDetailsProps) {
@@ -144,7 +127,17 @@ export function OrderDetails({ order, onSuccess }: OrderDetailsProps) {
             <tbody>
               {order.items.map((item, index) => (
                 <tr key={index} className="border-b last:border-0">
-                  <td className="px-4 py-2">{item.name}</td>
+                  <td className="px-4 py-2">
+                    <div>
+                      <div className="font-medium">{item.name}</div>
+                      {item.description && (
+                        <div className="text-sm text-muted-foreground">{item.description}</div>
+                      )}
+                      <div className="text-xs text-muted-foreground">
+                        {item.isCustom ? 'Мебель на заказ' : 'Из каталога'}
+                      </div>
+                    </div>
+                  </td>
                   <td className="px-4 py-2 text-right">{item.price.toLocaleString()} ₽</td>
                   <td className="px-4 py-2 text-right">{item.quantity}</td>
                   <td className="px-4 py-2 text-right">{(item.price * item.quantity).toLocaleString()} ₽</td>
@@ -171,7 +164,7 @@ export function OrderDetails({ order, onSuccess }: OrderDetailsProps) {
               <SelectValue placeholder="Выберите статус" />
             </SelectTrigger>
             <SelectContent>
-              {ORDER_STATUSES.map((statusOption) => (
+              {ORDER_STATUS_OPTIONS.map((statusOption) => (
                 <SelectItem key={statusOption.value} value={statusOption.value}>
                   {statusOption.label}
                 </SelectItem>

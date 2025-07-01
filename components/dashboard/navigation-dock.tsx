@@ -11,7 +11,6 @@ import { useMobileDetection } from "@/hooks/use-mobile-detection"
 import {
   Home,
   Package2,
-  FolderOpen,
   ShoppingBag,
   Images,
   Users2,
@@ -19,6 +18,7 @@ import {
   LogOut,
   FolderSyncIcon as Sync,
   User,
+  MessageSquare,
 } from "lucide-react"
 
 const navItems = [
@@ -33,14 +33,9 @@ const navItems = [
     icon: Package2,
   },
   {
-    title: "Категории",
-    href: "/categories",
-    icon: FolderOpen,
-  },
-  {
-    title: "Заказы",
+    title: "Заявки",
     href: "/orders",
-    icon: ShoppingBag,
+    icon: MessageSquare,
   },
   {
     title: "Галерея",
