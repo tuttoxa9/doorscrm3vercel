@@ -109,8 +109,7 @@ export function ContactRequestsList() {
   const filteredRequests = contactRequests.filter(
     (request) =>
       request.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      request.phone.includes(searchQuery) ||
-      (request.email && request.email.toLowerCase().includes(searchQuery.toLowerCase())),
+      request.phone.includes(searchQuery),
   )
 
   return (
@@ -120,7 +119,6 @@ export function ContactRequestsList() {
           <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
           <Input
             type="search"
-            placeholder="Поиск заявок..."
             className="pl-8"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
@@ -174,9 +172,6 @@ export function ContactRequestsList() {
                       <div>
                         <div className="font-medium">{request.name}</div>
                         <div className="text-sm text-muted-foreground">{request.phone}</div>
-                        {request.email && (
-                          <div className="text-sm text-muted-foreground">{request.email}</div>
-                        )}
                       </div>
                     </TableCell>
                     <TableCell>
@@ -252,12 +247,7 @@ export function ContactRequestsList() {
                   <label className="text-sm font-medium">Телефон:</label>
                   <p className="text-sm text-muted-foreground">{currentRequest.phone}</p>
                 </div>
-                {currentRequest.email && (
-                  <div>
-                    <label className="text-sm font-medium">Email:</label>
-                    <p className="text-sm text-muted-foreground">{currentRequest.email}</p>
-                  </div>
-                )}
+
                 <div>
                   <label className="text-sm font-medium">Источник:</label>
                   <p className="text-sm text-muted-foreground capitalize">{currentRequest.source}</p>

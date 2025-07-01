@@ -109,8 +109,7 @@ export function OrdersList() {
   const filteredOrders = orders.filter(
     (order) =>
       order.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      order.phone.includes(searchQuery) ||
-      (order.email && order.email.toLowerCase().includes(searchQuery.toLowerCase())),
+      order.phone.includes(searchQuery),
   )
 
   return (
@@ -120,7 +119,6 @@ export function OrdersList() {
           <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
           <Input
             type="search"
-            placeholder="Поиск заказов..."
             className="pl-8"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
@@ -181,9 +179,6 @@ export function OrdersList() {
                       <div>
                         <div className="font-medium">{order.name}</div>
                         <div className="text-sm text-muted-foreground">{order.phone}</div>
-                        {order.email && (
-                          <div className="text-sm text-muted-foreground">{order.email}</div>
-                        )}
                       </div>
                     </TableCell>
                     <TableCell>
@@ -191,7 +186,7 @@ export function OrdersList() {
                         ? format(order.createdAt.toDate(), "d MMMM yyyy, HH:mm", { locale: ru })
                         : "Дата не указана"}
                     </TableCell>
-                    <TableCell>{order.total.toLocaleString()} ₽</TableCell>
+                    <TableCell>{order.total.toLocaleString()}</TableCell>
                     <TableCell>
                       <div className="text-sm">
                         {order.items.length} {order.items.length === 1 ? 'товар' : order.items.length < 5 ? 'товара' : 'товаров'}

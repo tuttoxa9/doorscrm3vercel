@@ -13,7 +13,6 @@ export interface Order {
   id: string
   name: string
   phone: string
-  email?: string
   status: 'new' | 'processed' | 'in_production' | 'shipping' | 'completed' | 'cancelled'
   createdAt: any
   items: OrderItem[]

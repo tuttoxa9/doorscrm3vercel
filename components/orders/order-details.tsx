@@ -80,7 +80,7 @@ export function OrderDetails({ order, onSuccess }: OrderDetailsProps) {
             </div>
             <div className="flex justify-between">
               <span className="text-muted-foreground">Сумма:</span>
-              <span className="font-medium">{order.total.toLocaleString()} ₽</span>
+              <span className="font-medium">{order.total.toLocaleString()}</span>
             </div>
           </div>
         </div>
@@ -96,12 +96,7 @@ export function OrderDetails({ order, onSuccess }: OrderDetailsProps) {
               <span className="text-muted-foreground">Телефон:</span>
               <span>{order.phone}</span>
             </div>
-            {order.email && (
-              <div className="flex justify-between">
-                <span className="text-muted-foreground">Email:</span>
-                <span>{order.email}</span>
-              </div>
-            )}
+
             {order.address && (
               <div className="flex justify-between">
                 <span className="text-muted-foreground">Адрес:</span>
@@ -138,9 +133,9 @@ export function OrderDetails({ order, onSuccess }: OrderDetailsProps) {
                       </div>
                     </div>
                   </td>
-                  <td className="px-4 py-2 text-right">{item.price.toLocaleString()} ₽</td>
+                  <td className="px-4 py-2 text-right">{item.price.toLocaleString()}</td>
                   <td className="px-4 py-2 text-right">{item.quantity}</td>
-                  <td className="px-4 py-2 text-right">{(item.price * item.quantity).toLocaleString()} ₽</td>
+                  <td className="px-4 py-2 text-right">{(item.price * item.quantity).toLocaleString()}</td>
                 </tr>
               ))}
             </tbody>
@@ -149,7 +144,7 @@ export function OrderDetails({ order, onSuccess }: OrderDetailsProps) {
                 <td colSpan={3} className="px-4 py-2 text-right font-medium">
                   Итого:
                 </td>
-                <td className="px-4 py-2 text-right font-medium">{order.total.toLocaleString()} ₽</td>
+                <td className="px-4 py-2 text-right font-medium">{order.total.toLocaleString()}</td>
               </tr>
             </tfoot>
           </table>
@@ -179,7 +174,6 @@ export function OrderDetails({ order, onSuccess }: OrderDetailsProps) {
             id="notes"
             value={notes}
             onChange={(e) => setNotes(e.target.value)}
-            placeholder="Добавьте заметки к заказу"
             rows={3}
           />
         </div>

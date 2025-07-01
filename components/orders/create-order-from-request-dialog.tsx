@@ -139,7 +139,6 @@ export function CreateOrderFromRequestDialog({
       await addDoc(collection(db, "orders"), {
         name: contactRequest.name,
         phone: contactRequest.phone,
-        email: contactRequest.email || "",
         status: "new",
         createdAt: Timestamp.now(),
         items: orderItems,
@@ -198,7 +197,7 @@ export function CreateOrderFromRequestDialog({
                   <SelectContent>
                     {products.map((product) => (
                       <SelectItem key={product.id} value={product.id}>
-                        {product.name} - {product.price.toLocaleString()} ₽
+                        {product.name} - {product.price.toLocaleString()}
                       </SelectItem>
                     ))}
                   </SelectContent>
@@ -229,17 +228,15 @@ export function CreateOrderFromRequestDialog({
                 <Input
                   value={customItemName}
                   onChange={(e) => setCustomItemName(e.target.value)}
-                  placeholder="Например: Кухонный гарнитур"
                 />
               </div>
               <div className="space-y-2">
-                <Label>Цена (₽)</Label>
+                <Label>Цена</Label>
                 <Input
                   type="number"
                   min="0"
                   value={customItemPrice}
                   onChange={(e) => setCustomItemPrice(e.target.value)}
-                  placeholder="0"
                 />
               </div>
             </div>
@@ -248,7 +245,6 @@ export function CreateOrderFromRequestDialog({
               <Textarea
                 value={customItemDescription}
                 onChange={(e) => setCustomItemDescription(e.target.value)}
-                placeholder="Детальное описание мебели на заказ"
                 rows={3}
               />
             </div>
@@ -301,8 +297,8 @@ export function CreateOrderFromRequestDialog({
                           </div>
                         </TableCell>
                         <TableCell>{item.quantity}</TableCell>
-                        <TableCell>{item.price.toLocaleString()} ₽</TableCell>
-                        <TableCell>{(item.price * item.quantity).toLocaleString()} ₽</TableCell>
+                        <TableCell>{item.price.toLocaleString()}</TableCell>
+                        <TableCell>{(item.price * item.quantity).toLocaleString()}</TableCell>
                         <TableCell>
                           <span className={`inline-flex items-center rounded-full px-2 py-1 text-xs font-medium ${
                             item.isCustom
@@ -328,7 +324,7 @@ export function CreateOrderFromRequestDialog({
               </div>
               <div className="text-right">
                 <div className="text-lg font-semibold">
-                  Итого: {calculateTotal().toLocaleString()} ₽
+                  Итого: {calculateTotal().toLocaleString()}
                 </div>
               </div>
             </div>
@@ -340,7 +336,6 @@ export function CreateOrderFromRequestDialog({
             <Textarea
               value={notes}
               onChange={(e) => setNotes(e.target.value)}
-              placeholder="Дополнительная информация о заказе"
               rows={3}
             />
           </div>

@@ -36,7 +36,6 @@ export function CreateOrderDialog({ open, onOpenChange, onSuccess }: CreateOrder
   // Данные клиента
   const [customerName, setCustomerName] = useState("")
   const [customerPhone, setCustomerPhone] = useState("")
-  const [customerEmail, setCustomerEmail] = useState("")
   const [notes, setNotes] = useState("")
 
   // Добавление товаров
@@ -59,7 +58,6 @@ export function CreateOrderDialog({ open, onOpenChange, onSuccess }: CreateOrder
     setOrderItems([])
     setCustomerName("")
     setCustomerPhone("")
-    setCustomerEmail("")
     setNotes("")
     setSelectedProductId("")
     setCustomItemName("")
@@ -147,7 +145,6 @@ export function CreateOrderDialog({ open, onOpenChange, onSuccess }: CreateOrder
       await addDoc(collection(db, "orders"), {
         name: customerName,
         phone: customerPhone,
-        email: customerEmail,
         status: "new",
         createdAt: Timestamp.now(),
         items: orderItems,
@@ -194,7 +191,6 @@ export function CreateOrderDialog({ open, onOpenChange, onSuccess }: CreateOrder
                 <Input
                   value={customerName}
                   onChange={(e) => setCustomerName(e.target.value)}
-                  placeholder="Введите имя клиента"
                 />
               </div>
               <div className="space-y-2">
@@ -202,18 +198,8 @@ export function CreateOrderDialog({ open, onOpenChange, onSuccess }: CreateOrder
                 <Input
                   value={customerPhone}
                   onChange={(e) => setCustomerPhone(e.target.value)}
-                  placeholder="+7 (900) 123-45-67"
                 />
               </div>
-            </div>
-            <div className="space-y-2">
-              <Label>Email</Label>
-              <Input
-                type="email"
-                value={customerEmail}
-                onChange={(e) => setCustomerEmail(e.target.value)}
-                placeholder="client@example.com"
-              />
             </div>
           </div>
 
@@ -230,7 +216,7 @@ export function CreateOrderDialog({ open, onOpenChange, onSuccess }: CreateOrder
                   <SelectContent>
                     {products.map((product) => (
                       <SelectItem key={product.id} value={product.id}>
-                        {product.name} - {product.price.toLocaleString()} ₽
+                        {product.name} - {product.price.toLocaleString()}
                       </SelectItem>
                     ))}
                   </SelectContent>
@@ -261,17 +247,15 @@ export function CreateOrderDialog({ open, onOpenChange, onSuccess }: CreateOrder
                 <Input
                   value={customItemName}
                   onChange={(e) => setCustomItemName(e.target.value)}
-                  placeholder="Например: Кухонный гарнитур"
                 />
               </div>
               <div className="space-y-2">
-                <Label>Цена (₽)</Label>
+                <Label>Цена</Label>
                 <Input
                   type="number"
                   min="0"
                   value={customItemPrice}
                   onChange={(e) => setCustomItemPrice(e.target.value)}
-                  placeholder="0"
                 />
               </div>
             </div>
@@ -280,7 +264,6 @@ export function CreateOrderDialog({ open, onOpenChange, onSuccess }: CreateOrder
               <Textarea
                 value={customItemDescription}
                 onChange={(e) => setCustomItemDescription(e.target.value)}
-                placeholder="Детальное описание мебели на заказ"
                 rows={3}
               />
             </div>
@@ -333,8 +316,8 @@ export function CreateOrderDialog({ open, onOpenChange, onSuccess }: CreateOrder
                           </div>
                         </TableCell>
                         <TableCell>{item.quantity}</TableCell>
-                        <TableCell>{item.price.toLocaleString()} ₽</TableCell>
-                        <TableCell>{(item.price * item.quantity).toLocaleString()} ₽</TableCell>
+                        <TableCell>{item.price.toLocaleString()}</TableCell>
+                        <TableCell>{(item.price * item.quantity).toLocaleString()}</TableCell>
                         <TableCell>
                           <span className={`inline-flex items-center rounded-full px-2 py-1 text-xs font-medium ${
                             item.isCustom
@@ -360,7 +343,7 @@ export function CreateOrderDialog({ open, onOpenChange, onSuccess }: CreateOrder
               </div>
               <div className="text-right">
                 <div className="text-lg font-semibold">
-                  Итого: {calculateTotal().toLocaleString()} ₽
+                  Итого: {calculateTotal().toLocaleString()}
                 </div>
               </div>
             </div>
@@ -372,7 +355,6 @@ export function CreateOrderDialog({ open, onOpenChange, onSuccess }: CreateOrder
             <Textarea
               value={notes}
               onChange={(e) => setNotes(e.target.value)}
-              placeholder="Дополнительная информация о заказе"
               rows={3}
             />
           </div>

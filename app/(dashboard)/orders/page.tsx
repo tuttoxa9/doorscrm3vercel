@@ -1,13 +1,9 @@
 "use client"
 
-import { useState } from "react"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { ContactRequestsList } from "@/components/orders/contact-requests-list"
 import { OrdersList } from "@/components/orders/orders-list"
 
 export default function RequestsPage() {
-  const [activeTab, setActiveTab] = useState("contact-requests")
-
   return (
     <div className="space-y-6">
       <div>
@@ -15,20 +11,17 @@ export default function RequestsPage() {
         <p className="text-muted-foreground">Управление заявками на связь и заказами</p>
       </div>
 
-      <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-        <TabsList className="grid w-full grid-cols-2">
-          <TabsTrigger value="contact-requests">Заявки на связь</TabsTrigger>
-          <TabsTrigger value="orders">Заказы</TabsTrigger>
-        </TabsList>
-
-        <TabsContent value="contact-requests" className="space-y-4">
-          <ContactRequestsList />
-        </TabsContent>
-
-        <TabsContent value="orders" className="space-y-4">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div className="space-y-4">
+          <h2 className="text-xl font-semibold">Заказы</h2>
           <OrdersList />
-        </TabsContent>
-      </Tabs>
+        </div>
+
+        <div className="space-y-4">
+          <h2 className="text-xl font-semibold">Заявки на связь</h2>
+          <ContactRequestsList />
+        </div>
+      </div>
     </div>
   )
 }
