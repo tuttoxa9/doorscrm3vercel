@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { collection, getDocs, query, orderBy, where, doc, updateDoc } from "firebase/firestore"
+import { collection, getDocs, query, orderBy, where, doc, updateDoc, deleteDoc } from "firebase/firestore"
 import { db } from "@/lib/firebase/firebase-config"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -83,6 +83,27 @@ export function OrdersList() {
         variant: "destructive",
         title: "Ошибка",
         description: "Не удалось обновить статус заказа",
+      })
+    }
+  }
+
+  const handleDeleteOrder = async (orderId: string) => {
+    try {
+      await deleteDoc(doc(db, "orders", orderId))
+
+      toast({
+        title: "Успешно",
+        description: "Заказ удален",
+      })
+
+      setIsDialogOpen(false)
+      fetchOrders()
+    } catch (error) {
+      console.error("Error deleting order:", error)
+      toast({
+        variant: "destructive",
+        title: "Ошибка",
+        description: "Не удалось удалить заказ",
       })
     }
   }
@@ -238,6 +259,7 @@ export function OrdersList() {
                 setIsDialogOpen(false)
                 fetchOrders()
               }}
+              onDelete={() => handleDeleteOrder(currentOrder.id)}
             />
           )}
         </DialogContent>

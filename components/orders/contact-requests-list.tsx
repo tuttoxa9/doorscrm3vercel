@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog"
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog"
 import { useToast } from "@/components/ui/use-toast"
 import { Loader2, Search, ShoppingCart, Trash2 } from "lucide-react"
 import { format } from "date-fns"
@@ -87,6 +87,27 @@ export function ContactRequestsList() {
         variant: "destructive",
         title: "Ошибка",
         description: "Не удалось обновить статус заявки",
+      })
+    }
+  }
+
+  const handleDeleteRequest = async (requestId: string) => {
+    try {
+      await deleteDoc(doc(db, "contactRequests", requestId))
+
+      toast({
+        title: "Успешно",
+        description: "Заявка удалена",
+      })
+
+      setIsDialogOpen(false)
+      fetchContactRequests()
+    } catch (error) {
+      console.error("Error deleting request:", error)
+      toast({
+        variant: "destructive",
+        title: "Ошибка",
+        description: "Не удалось удалить заявку",
       })
     }
   }
@@ -266,6 +287,20 @@ export function ContactRequestsList() {
               </div>
             </div>
           )}
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setIsDialogOpen(false)}>
+              Закрыть
+            </Button>
+            {currentRequest && (
+              <Button
+                variant="destructive"
+                onClick={() => handleDeleteRequest(currentRequest.id)}
+              >
+                <Trash2 className="mr-2 h-4 w-4" />
+                Удалить заявку
+              </Button>
+            )}
+          </DialogFooter>
         </DialogContent>
       </Dialog>
 

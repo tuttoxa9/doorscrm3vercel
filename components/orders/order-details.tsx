@@ -8,7 +8,7 @@ import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { useToast } from "@/components/ui/use-toast"
-import { Loader2 } from "lucide-react"
+import { Loader2, Trash2 } from "lucide-react"
 import { format } from "date-fns"
 import { ru } from "date-fns/locale"
 import { Order, ORDER_STATUSES } from "@/lib/types/requests"
@@ -16,6 +16,7 @@ import { Order, ORDER_STATUSES } from "@/lib/types/requests"
 interface OrderDetailsProps {
   order: Order
   onSuccess: () => void
+  onDelete?: () => void
 }
 
 const ORDER_STATUS_OPTIONS = [
@@ -27,7 +28,7 @@ const ORDER_STATUS_OPTIONS = [
   { value: "cancelled", label: "Отменён" },
 ]
 
-export function OrderDetails({ order, onSuccess }: OrderDetailsProps) {
+export function OrderDetails({ order, onSuccess, onDelete }: OrderDetailsProps) {
   const [status, setStatus] = useState(order.status)
   const [notes, setNotes] = useState(order.notes || "")
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -179,20 +180,30 @@ export function OrderDetails({ order, onSuccess }: OrderDetailsProps) {
         </div>
       </div>
 
-      <div className="flex justify-end gap-4">
-        <Button type="button" variant="outline" onClick={onSuccess}>
-          Закрыть
-        </Button>
-        <Button onClick={handleUpdateOrder} disabled={isSubmitting}>
-          {isSubmitting ? (
-            <>
-              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-              Сохранение...
-            </>
-          ) : (
-            "Сохранить изменения"
+      <div className="flex justify-between gap-4">
+        <div>
+          {onDelete && (
+            <Button variant="destructive" onClick={onDelete}>
+              <Trash2 className="mr-2 h-4 w-4" />
+              Удалить заказ
+            </Button>
           )}
-        </Button>
+        </div>
+        <div className="flex gap-4">
+          <Button type="button" variant="outline" onClick={onSuccess}>
+            Закрыть
+          </Button>
+          <Button onClick={handleUpdateOrder} disabled={isSubmitting}>
+            {isSubmitting ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Сохранение...
+              </>
+            ) : (
+              "Сохранить изменения"
+            )}
+          </Button>
+        </div>
       </div>
     </div>
   )
