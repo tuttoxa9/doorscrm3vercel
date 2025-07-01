@@ -9,7 +9,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { useToast } from "@/components/ui/use-toast"
-import { Loader2, Search, Eye, Plus, Trash2 } from "lucide-react"
+import { Loader2, Search, Plus, Trash2 } from "lucide-react"
 import { format } from "date-fns"
 import { ru } from "date-fns/locale"
 import { BulkDeleteDialog } from "@/components/data-management/bulk-delete-dialog"
@@ -161,20 +161,17 @@ export function OrdersList() {
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>ID</TableHead>
                 <TableHead>Клиент</TableHead>
-                <TableHead>Дата</TableHead>
+                <TableHead>Дата заказа</TableHead>
                 <TableHead>Сумма</TableHead>
                 <TableHead>Товары</TableHead>
                 <TableHead>Статус</TableHead>
-                <TableHead className="text-right">Действия</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {filteredOrders.length > 0 ? (
                 filteredOrders.map((order) => (
-                  <TableRow key={order.id}>
-                    <TableCell className="font-mono text-xs">{order.id.slice(0, 8)}</TableCell>
+                  <TableRow key={order.id} className="cursor-pointer hover:bg-muted/50" onClick={() => handleViewOrder(order)}>
                     <TableCell>
                       <div>
                         <div className="font-medium">{order.name}</div>
@@ -196,6 +193,7 @@ export function OrdersList() {
                       <Select
                         value={order.status}
                         onValueChange={(value) => handleStatusChange(order.id, value)}
+                        onClick={(e) => e.stopPropagation()}
                       >
                         <SelectTrigger className="w-[140px]">
                           <span className={`inline-flex items-center rounded-full px-2 py-1 text-xs font-medium ${getStatusBadgeClass(order.status)}`}>
@@ -212,16 +210,11 @@ export function OrdersList() {
                         </SelectContent>
                       </Select>
                     </TableCell>
-                    <TableCell className="text-right">
-                      <Button variant="ghost" size="icon" onClick={() => handleViewOrder(order)}>
-                        <Eye className="h-4 w-4" />
-                      </Button>
-                    </TableCell>
                   </TableRow>
                 ))
               ) : (
                 <TableRow>
-                  <TableCell colSpan={7} className="h-24 text-center">
+                  <TableCell colSpan={5} className="h-24 text-center">
                     {searchQuery || statusFilter ? "Заказы не найдены" : "Нет заказов"}
                   </TableCell>
                 </TableRow>

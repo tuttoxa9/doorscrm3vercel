@@ -9,7 +9,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { useToast } from "@/components/ui/use-toast"
-import { Loader2, Search, Eye, MessageCircle, ShoppingCart, Trash2 } from "lucide-react"
+import { Loader2, Search, ShoppingCart, Trash2 } from "lucide-react"
 import { format } from "date-fns"
 import { ru } from "date-fns/locale"
 import { BulkDeleteDialog } from "@/components/data-management/bulk-delete-dialog"
@@ -155,7 +155,6 @@ export function ContactRequestsList() {
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>ID</TableHead>
                 <TableHead>Клиент</TableHead>
                 <TableHead>Дата</TableHead>
                 <TableHead>Источник</TableHead>
@@ -166,8 +165,7 @@ export function ContactRequestsList() {
             <TableBody>
               {filteredRequests.length > 0 ? (
                 filteredRequests.map((request) => (
-                  <TableRow key={request.id}>
-                    <TableCell className="font-mono text-xs">{request.id.slice(0, 8)}</TableCell>
+                  <TableRow key={request.id} className="cursor-pointer hover:bg-muted/50" onClick={() => handleViewRequest(request)}>
                     <TableCell>
                       <div>
                         <div className="font-medium">{request.name}</div>
@@ -186,6 +184,7 @@ export function ContactRequestsList() {
                       <Select
                         value={request.status}
                         onValueChange={(value) => handleStatusChange(request.id, value)}
+                        onClick={(e) => e.stopPropagation()}
                       >
                         <SelectTrigger className="w-[140px]">
                           <span className={`inline-flex items-center rounded-full px-2 py-1 text-xs font-medium ${getStatusBadgeClass(request.status)}`}>
@@ -201,25 +200,23 @@ export function ContactRequestsList() {
                       </Select>
                     </TableCell>
                     <TableCell className="text-right">
-                      <div className="flex items-center justify-end gap-2">
-                        <Button variant="ghost" size="icon" onClick={() => handleViewRequest(request)}>
-                          <Eye className="h-4 w-4" />
-                        </Button>
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          onClick={() => handleCreateOrderFromRequest(request)}
-                          disabled={request.status === 'converted'}
-                        >
-                          <ShoppingCart className="h-4 w-4" />
-                        </Button>
-                      </div>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          handleCreateOrderFromRequest(request)
+                        }}
+                        disabled={request.status === 'converted'}
+                      >
+                        <ShoppingCart className="h-4 w-4" />
+                      </Button>
                     </TableCell>
                   </TableRow>
                 ))
               ) : (
                 <TableRow>
-                  <TableCell colSpan={6} className="h-24 text-center">
+                  <TableCell colSpan={5} className="h-24 text-center">
                     {searchQuery || statusFilter ? "Заявки не найдены" : "Нет заявок на связь"}
                   </TableCell>
                 </TableRow>
