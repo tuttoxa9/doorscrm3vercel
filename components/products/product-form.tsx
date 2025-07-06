@@ -17,6 +17,7 @@ import { useToast } from "@/components/ui/use-toast"
 import { Loader2, X, Upload, Plus } from "lucide-react"
 import Image from "next/image"
 import { type Product, DEFAULT_COLORS } from "@/lib/types/product"
+import { ImageSort } from "@/components/ui/image-sort"
 
 interface ProductFormProps {
   product: Product | null
@@ -26,6 +27,7 @@ interface ProductFormProps {
 export function ProductForm({ product, onSuccess }: ProductFormProps) {
   const [uploading, setUploading] = useState(false)
   const [images, setImages] = useState<string[]>(product?.images || [])
+  const [imagePositions, setImagePositions] = useState<Record<string, number>>(product?.imagePositions || {})
   const [colors, setColors] = useState<string[]>(product?.colors || DEFAULT_COLORS)
   const [newColor, setNewColor] = useState("")
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -95,6 +97,11 @@ export function ProductForm({ product, onSuccess }: ProductFormProps) {
       const newImages = [...images]
       newImages.splice(index, 1)
       setImages(newImages)
+
+      // Удаляем позицию изображения
+      const newPositions = { ...imagePositions }
+      delete newPositions[url]
+      setImagePositions(newPositions)
     } catch (error) {
       console.error("Error removing image:", error)
       toast({
@@ -132,6 +139,7 @@ export function ProductForm({ product, onSuccess }: ProductFormProps) {
         description: data.description,
         colors,
         images,
+        imagePositions,
         inStock: data.inStock,
         featured: data.featured,
         updatedAt: new Date(),
@@ -276,48 +284,59 @@ export function ProductForm({ product, onSuccess }: ProductFormProps) {
           </div>
         </div>
 
-        <div className="space-y-2">
-          <Label className="text-sm">Изображения</Label>
-          <div className="grid grid-cols-4 gap-2">
-            {images.map((url, index) => (
-              <div key={index} className="group relative aspect-square rounded border overflow-hidden">
-                <Image
-                  src={url || "/placeholder.svg"}
-                  alt={`Product image ${index + 1}`}
-                  fill
-                  className="object-cover"
-                />
-                <button
-                  type="button"
-                  onClick={() => handleRemoveImage(url, index)}
-                  className="absolute top-1 right-1 bg-black/50 rounded-full p-0.5 opacity-0 group-hover:opacity-100 transition-opacity"
-                >
-                  <X className="h-3 w-3 text-white" />
-                </button>
-              </div>
-            ))}
+        <div className="space-y-4">
+          <div className="space-y-2">
+            <Label className="text-sm">Изображения</Label>
+            <div className="grid grid-cols-4 gap-2">
+              {images.map((url, index) => (
+                <div key={index} className="group relative aspect-square rounded border overflow-hidden">
+                  <Image
+                    src={url || "/placeholder.svg"}
+                    alt={`Product image ${index + 1}`}
+                    fill
+                    className="object-cover"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => handleRemoveImage(url, index)}
+                    className="absolute top-1 right-1 bg-black/50 rounded-full p-0.5 opacity-0 group-hover:opacity-100 transition-opacity"
+                  >
+                    <X className="h-3 w-3 text-white" />
+                  </button>
+                </div>
+              ))}
 
-            <label className="flex aspect-square cursor-pointer flex-col items-center justify-center rounded border border-dashed bg-muted/25 hover:bg-muted/50 transition-colors">
-              <div className="flex flex-col items-center justify-center space-y-1 p-2 text-center">
-                {uploading ? (
-                  <Loader2 className="h-4 w-4 animate-spin text-muted-foreground" />
-                ) : (
-                  <>
-                    <Upload className="h-4 w-4 text-muted-foreground" />
-                    <span className="text-xs text-muted-foreground">Загрузить</span>
-                  </>
-                )}
-              </div>
-              <Input
-                type="file"
-                accept="image/*"
-                multiple
-                className="hidden"
-                onChange={handleImageUpload}
-                disabled={uploading}
-              />
-            </label>
+              <label className="flex aspect-square cursor-pointer flex-col items-center justify-center rounded border border-dashed bg-muted/25 hover:bg-muted/50 transition-colors">
+                <div className="flex flex-col items-center justify-center space-y-1 p-2 text-center">
+                  {uploading ? (
+                    <Loader2 className="h-4 w-4 animate-spin text-muted-foreground" />
+                  ) : (
+                    <>
+                      <Upload className="h-4 w-4 text-muted-foreground" />
+                      <span className="text-xs text-muted-foreground">Загрузить</span>
+                    </>
+                  )}
+                </div>
+                <Input
+                  type="file"
+                  accept="image/*"
+                  multiple
+                  className="hidden"
+                  onChange={handleImageUpload}
+                  disabled={uploading}
+                />
+              </label>
+            </div>
           </div>
+
+          {images.length > 0 && (
+            <ImageSort
+              images={images}
+              imagePositions={imagePositions}
+              onUpdatePositions={setImagePositions}
+              onRemoveImage={handleRemoveImage}
+            />
+          )}
         </div>
       </div>
 

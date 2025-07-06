@@ -18,6 +18,7 @@ import { useToast } from "@/components/ui/use-toast"
 import { Loader2, X, Upload, Plus } from "lucide-react"
 import Image from "next/image"
 import { type Shelf, DEFAULT_COLORS, MATERIALS, SHELF_MOUNT_TYPES } from "@/lib/types/product"
+import { ImageSort } from "@/components/ui/image-sort"
 
 interface ShelfFormProps {
   shelf: Shelf | null
@@ -27,6 +28,7 @@ interface ShelfFormProps {
 export function ShelfForm({ shelf, onSuccess }: ShelfFormProps) {
   const [uploading, setUploading] = useState(false)
   const [images, setImages] = useState<string[]>(shelf?.images || [])
+  const [imagePositions, setImagePositions] = useState<Record<string, number>>(shelf?.imagePositions || {})
   const [colors, setColors] = useState<string[]>(shelf?.colors || DEFAULT_COLORS)
   const [newColor, setNewColor] = useState("")
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -85,11 +87,17 @@ export function ShelfForm({ shelf, onSuccess }: ShelfFormProps) {
     }
   }
 
-  const removeImage = async (url: string) => {
+  const removeImage = async (url: string, index: number) => {
     try {
       const imageRef = ref(storage, url)
       await deleteObject(imageRef)
       setImages(prev => prev.filter(img => img !== url))
+
+      // Удаляем позицию изображения
+      const newPositions = { ...imagePositions }
+      delete newPositions[url]
+      setImagePositions(newPositions)
+
       toast({
         title: "Изображение удалено",
       })
@@ -150,6 +158,7 @@ export function ShelfForm({ shelf, onSuccess }: ShelfFormProps) {
         maxWeight: 10, // значение по умолчанию
         colors,
         images,
+        imagePositions,
         inStock: data.inStock,
         featured: data.featured,
         createdAt: shelf?.createdAt || new Date(),
@@ -268,45 +277,56 @@ export function ShelfForm({ shelf, onSuccess }: ShelfFormProps) {
       </div>
 
       {/* Изображения */}
-      <div className="space-y-2">
-        <Label>Изображения (максимум 5) *</Label>
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
-          {images.map((url, index) => (
-            <div key={index} className="relative group">
-              <Image
-                src={url}
-                alt={`Изображение ${index + 1}`}
-                width={150}
-                height={150}
-                className="rounded-lg object-cover w-full h-32"
-              />
-              <Button
-                type="button"
-                variant="destructive"
-                size="sm"
-                className="absolute top-1 right-1 opacity-0 group-hover:opacity-100 transition-opacity"
-                onClick={() => removeImage(url)}
-              >
-                <X className="h-3 w-3" />
-              </Button>
-            </div>
-          ))}
-          {images.length < 5 && (
-            <label className="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center cursor-pointer hover:border-gray-400 transition-colors h-32 flex flex-col items-center justify-center">
-              <Upload className="h-6 w-6 text-gray-400 mb-2" />
-              <span className="text-sm text-gray-500">Загрузить</span>
-              <input
-                type="file"
-                multiple
-                accept="image/*"
-                onChange={handleImageUpload}
-                className="hidden"
-                disabled={uploading}
-              />
-            </label>
-          )}
+      <div className="space-y-4">
+        <div className="space-y-2">
+          <Label>Изображения (максимум 5) *</Label>
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+            {images.map((url, index) => (
+              <div key={index} className="relative group">
+                <Image
+                  src={url}
+                  alt={`Изображение ${index + 1}`}
+                  width={150}
+                  height={150}
+                  className="rounded-lg object-cover w-full h-32"
+                />
+                <Button
+                  type="button"
+                  variant="destructive"
+                  size="sm"
+                  className="absolute top-1 right-1 opacity-0 group-hover:opacity-100 transition-opacity"
+                  onClick={() => removeImage(url, index)}
+                >
+                  <X className="h-3 w-3" />
+                </Button>
+              </div>
+            ))}
+            {images.length < 5 && (
+              <label className="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center cursor-pointer hover:border-gray-400 transition-colors h-32 flex flex-col items-center justify-center">
+                <Upload className="h-6 w-6 text-gray-400 mb-2" />
+                <span className="text-sm text-gray-500">Загрузить</span>
+                <input
+                  type="file"
+                  multiple
+                  accept="image/*"
+                  onChange={handleImageUpload}
+                  className="hidden"
+                  disabled={uploading}
+                />
+              </label>
+            )}
+          </div>
+          {uploading && <p className="text-sm text-blue-500">Загрузка изображений...</p>}
         </div>
-        {uploading && <p className="text-sm text-blue-500">Загрузка изображений...</p>}
+
+        {images.length > 0 && (
+          <ImageSort
+            images={images}
+            imagePositions={imagePositions}
+            onUpdatePositions={setImagePositions}
+            onRemoveImage={removeImage}
+          />
+        )}
       </div>
 
       {/* Переключатели */}
