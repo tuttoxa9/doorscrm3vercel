@@ -6,13 +6,13 @@ import { getAuth } from "firebase/auth"
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyDFpT1MQSqfa8SXG0fKRS_olUAheOJAEII",
-  authDomain: "mebel-be602.firebaseapp.com",
-  projectId: "mebel-be602",
-  storageBucket: "mebel-be602.firebasestorage.app",
-  messagingSenderId: "368556149445",
-  appId: "1:368556149445:web:033463c32a4ee6a93c7eac",
-  measurementId: "G-3H974WY264",
+  apiKey: "AIzaSyCBEzvbVPfnvdHjUo-wCAth0MEJaLuYo1A",
+  authDomain: "mebel1-36ef1.firebaseapp.com",
+  projectId: "mebel1-36ef1",
+  storageBucket: "mebel1-36ef1.firebasestorage.app",
+  messagingSenderId: "513158929501",
+  appId: "1:513158929501:web:444a44a4a1fff5c90441b4",
+  measurementId: "G-6R4D5DM1BN",
 }
 
 // Initialize Firebase
